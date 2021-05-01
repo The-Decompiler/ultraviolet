@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
+import OpenKeyboard from "./components/OpenKeyboard";
+
 import {
 	SafeAreaView,
 	StyleSheet,
@@ -46,10 +48,11 @@ const App = () => {
 						</TouchableHighlight>
 					</View>
 				</View>
+				<OpenKeyboard />
 			</SafeAreaView>
 		</>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	scrollView: {
