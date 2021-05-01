@@ -9,10 +9,15 @@ import {
 	TouchableHighlight
 } from "react-native";
 
-const DEFAULT_TEXT_VALUE = " ";
+import { DEFAULT_TEXT_VALUE } from "../utils";
 
-const OpenKeyboard = () => {
-	const [keyPress, setKeyPress] = useState(DEFAULT_TEXT_VALUE);
+type Props = {
+	keyPress: string,
+	setKeyPress: React.Dispatch<React.SetStateAction<string>>,
+}
+
+
+export const OpenKeyboard = ({ keyPress, setKeyPress }: Props) => {
 	const [keyboardShowing, setKeyboardShowing] = useState(false);
 	const inputRef = useRef<TextInput>(null);
 
@@ -27,7 +32,7 @@ const OpenKeyboard = () => {
 
 	useEffect(() => {
 		if (keyPress != DEFAULT_TEXT_VALUE) {
-			console.log("send key " + keyPress + " to server");
+			// console.log("Send key " + keyPress + " to server");
 			setKeyPress(DEFAULT_TEXT_VALUE);
 		}
 	}, [keyPress]);
@@ -96,5 +101,3 @@ const styles = StyleSheet.create({
 		borderRadius: 15
 	}
 });
-
-export default OpenKeyboard;

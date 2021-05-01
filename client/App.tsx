@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TcpSocket from "react-native-tcp-socket";
 
-import OpenKeyboard from "./components/OpenKeyboard";
+import { OpenKeyboard } from "./components/OpenKeyboard";
 
 import {
 	SafeAreaView,
@@ -11,8 +11,12 @@ import {
 	TouchableHighlight
 } from "react-native";
 
+import { DEFAULT_TEXT_VALUE } from "./utils";
+
+
 const App = () => {
 	const [client, setClient] = useState<TcpSocket.Socket>();
+	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 
 	useEffect(() => {
 		connectSocket();
@@ -39,16 +43,24 @@ const App = () => {
 		<>
 			<SafeAreaView style={styles.scrollView}>
 				<View style={styles.center}>
-					<TouchableHighlight onPress={handlePress} underlayColor="#7A4988" style={styles.button}>
+					<TouchableHighlight
+						onPress={handlePress}
+						underlayColor="#7A4988"
+						style={styles.button}
+					>
 						<Text style={styles.buttonText}>Tap me!</Text>
 					</TouchableHighlight>
 					<View style={styles.footer}>
-						<TouchableHighlight onPress={connectSocket} underlayColor="#7A4988" style={styles.refresh}>
+						<TouchableHighlight
+							onPress={connectSocket}
+							underlayColor="#7A4988"
+							style={styles.refresh}
+						>
 							<Text style={styles.refreshText}>Reconnect</Text>
 						</TouchableHighlight>
 					</View>
 				</View>
-				<OpenKeyboard />
+				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
 			</SafeAreaView>
 		</>
 	);
