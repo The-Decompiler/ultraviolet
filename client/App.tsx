@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TcpSocket from "react-native-tcp-socket";
 
 import { OpenKeyboard } from "./components/OpenKeyboard";
 
@@ -11,7 +10,12 @@ import {
 	TouchableHighlight
 } from "react-native";
 
+import TcpSocket from "react-native-tcp-socket";
 import { DEFAULT_TEXT_VALUE } from "./utils";
+import { connectSocket,
+				 terminateConnection,
+				 sendMessage
+} from "./utils";
 
 
 const App = () => {
@@ -19,25 +23,11 @@ const App = () => {
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 
 	useEffect(() => {
-		connectSocket();
-		return () => {
-			if (client)
-				client.destroy();
-		};
+		setClient(connectSocket());
+		return () => { terminateConnection(client) };
 	}, []);
 
-	const connectSocket = () => {
-		setClient(TcpSocket.createConnection({
-			port: 27001,
-			host: "localhost",
-		}, () => {}));
-	}
-
-	const handlePress = () => {
-		if (client)
-			client.write("Pressed!");
-		console.log("Pressed!");
-	}
+	const handlePress = () => sendMessage(client, "Pressed!");
 
 	return (
 		<>
