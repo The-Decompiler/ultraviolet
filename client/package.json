@@ -10,7 +10,8 @@
 	},
 	"dependencies": {
 		"react": "16.13.1",
-		"react-native": "0.63.4"
+		"react-native": "0.63.4",
+		"react-native-tcp-socket": "^5.2.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.4",
@@ -29,6 +30,13 @@
 	},
 	"jest": {
 		"preset": "react-native",
-		"moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx",
+			"json",
+			"node"
+		]
 	}
 }

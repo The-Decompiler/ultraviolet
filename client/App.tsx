@@ -1,4 +1,5 @@
 import React from "react";
+import TcpSocket from "react-native-tcp-socket";
 
 import {
 	SafeAreaView,
@@ -9,8 +10,27 @@ import {
 } from "react-native";
 
 const App = () => {
+	const [client, setClient] = useState<TcpSocket.Socket>();
+
+	useEffect(() => {
+		connectSocket();
+		return () => {
+			if (client)
+				client.destroy();
+		};
+	}, []);
+
+	const connectSocket = () => {
+		setClient(TcpSocket.createConnection({
+			port: 27001,
+			host: "localhost",
+		}, () => {}));
+	}
+
 	const handlePress = () => {
-		console.log("Pressed!")
+		if (client)
+			client.write("Pressed!");
+		console.log("Pressed!");
 	}
 
 	return (
