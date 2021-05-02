@@ -2,20 +2,17 @@ import React, { useState, useEffect } from "react";
 
 import { OpenKeyboard } from "./components/OpenKeyboard";
 import { Reconnect } from "./components/Reconnect";
+import { Touchpad } from "./components/Touchpad";
 
 import {
 	SafeAreaView,
-	StyleSheet,
-	View,
-	Text,
-	TouchableHighlight
+	StyleSheet
 } from "react-native";
 
 import TcpSocket from "react-native-tcp-socket";
 import { DEFAULT_TEXT_VALUE } from "./utils";
 import { connectSocket,
-				 terminateConnection,
-				 sendMessage
+				 terminateConnection
 } from "./utils";
 
 
@@ -28,20 +25,10 @@ const App = () => {
 		return () => { terminateConnection(client) };
 	}, []);
 
-	const handlePress = () => sendMessage(client, "Pressed!");
-
 	return (
 		<>
 			<SafeAreaView style={styles.scrollView}>
-				<View style={styles.center}>
-					<TouchableHighlight
-						onPress={handlePress}
-						underlayColor="#7A4988"
-						style={styles.button}
-					>
-						<Text style={styles.buttonText}>Tap me!</Text>
-					</TouchableHighlight>
-				</View>
+				<Touchpad />
 				<Reconnect setClient={setClient} />
 				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
 			</SafeAreaView>
@@ -58,7 +45,7 @@ const styles = StyleSheet.create({
 	center: {
 		height: "100%",
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 	button: {
 		margin: 30,
