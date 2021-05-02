@@ -17,7 +17,6 @@ import { connectSocket,
 				 sendMessage
 } from "./utils";
 
-
 const App = () => {
 	const [client, setClient] = useState<TcpSocket.Socket>();
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
