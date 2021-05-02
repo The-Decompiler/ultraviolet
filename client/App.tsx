@@ -16,7 +16,6 @@ import { connectSocket,
 				 terminateConnection
 } from "./utils";
 
-
 const App = () => {
 	const [client, setClient] = useState<TcpSocket.Socket>();
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
@@ -48,6 +47,22 @@ const styles = StyleSheet.create({
 		height: "100%",
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	footer: {
+		position: "absolute",
+		bottom: 0,
+	},
+	refresh: {
+		width: 105,
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "#710193",
+		height: 40,
+		borderRadius: 20,
+	},
+	refreshText: {
+		fontSize: 15,
+		color: "white",
 	},
 	button: {
 		margin: 30,
