@@ -13,10 +13,26 @@ enum MouseButtons {
 }
 
 export const MouseClick = () => {
-	const [toggleLongButton, setToggleLongButton] = useState<MouseButtons | null>(null);
+	const [toggleMouseLeft, setToggleMouseLeft] = useState(false);
+	const [toggleMouseMiddle, setToggleMouseMiddle] = useState(false);
+	const [toggleMouseRight, setToggleMouseRight] = useState(false);
 
-	const toggleLongButtonHandler = (button: MouseButtons) =>
-		setToggleLongButton((toggleLongButton == button) ? null : button);
+	const toggleLongButtonHandler = (button: MouseButtons) => {
+		switch (button) {
+			case MouseButtons.LEFT:
+				setToggleMouseLeft(toggleMouseLeft ? false : true);
+				console.log("left");
+				break;
+			case MouseButtons.MIDDLE:
+				setToggleMouseMiddle(toggleMouseMiddle ? false : true);
+				console.log("middle");
+				break;
+			case MouseButtons.RIGHT:
+				setToggleMouseRight(toggleMouseRight ? false : true);
+				console.log("right");
+				break;
+		}
+	}
 
 	return (
 		<View style={styles.footer}>
@@ -26,7 +42,7 @@ export const MouseClick = () => {
 				underlayColor="#758599"
 				style={
 				[styles.leftClick,
-				 (toggleLongButton == MouseButtons.LEFT) && styles.primaryColorDisable]
+				 toggleMouseLeft && styles.primaryColorDisable]
 			}><View /></TouchableHighlight>
 			<View style={styles.center}>
 				<TouchableHighlight
@@ -35,7 +51,7 @@ export const MouseClick = () => {
 					underlayColor="#314155"
 					style={
 					[styles.middleClick,
-					 (toggleLongButton == MouseButtons.MIDDLE) && styles.secondaryColorDisable]
+					 toggleMouseMiddle && styles.secondaryColorDisable]
 				}><View /></TouchableHighlight>
 			</View>
 			<TouchableHighlight
@@ -44,7 +60,7 @@ export const MouseClick = () => {
 				underlayColor="#758599"
 				style={
 				[styles.rightClick,
-				 (toggleLongButton == MouseButtons.RIGHT) && styles.primaryColorDisable]
+				 toggleMouseRight && styles.primaryColorDisable]
 				}><View /></TouchableHighlight>
 		</View>
 	)
