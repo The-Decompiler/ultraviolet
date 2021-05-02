@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { OpenKeyboard } from "./components/OpenKeyboard";
+import { MouseClick } from "./components/MouseClick";
 import { Reconnect } from "./components/Reconnect";
 import { Touchpad } from "./components/Touchpad";
 
@@ -29,6 +30,7 @@ const App = () => {
 		<>
 			<SafeAreaView style={styles.scrollView}>
 				<Touchpad />
+				<MouseClick />
 				<Reconnect setClient={setClient} />
 				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
 			</SafeAreaView>
