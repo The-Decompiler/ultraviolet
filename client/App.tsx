@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { OpenKeyboard } from "./components/OpenKeyboard";
+import { Reconnect } from "./components/Reconnect";
 
 import {
 	SafeAreaView,
@@ -40,16 +41,8 @@ const App = () => {
 					>
 						<Text style={styles.buttonText}>Tap me!</Text>
 					</TouchableHighlight>
-					<View style={styles.footer}>
-						<TouchableHighlight
-							onPress={connectSocket}
-							underlayColor="#7A4988"
-							style={styles.refresh}
-						>
-							<Text style={styles.refreshText}>Reconnect</Text>
-						</TouchableHighlight>
-					</View>
 				</View>
+				<Reconnect setClient={setClient} />
 				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
 			</SafeAreaView>
 		</>
@@ -66,22 +59,6 @@ const styles = StyleSheet.create({
 		height: "100%",
 		alignItems: "center",
 		justifyContent: "center"
-	},
-	footer: {
-		position: "absolute",
-		bottom: 0,
-	},
-	refresh: {
-		width: 105,
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "#710193",
-		height: 40,
-		borderRadius: 20,
-	},
-	refreshText: {
-		fontSize: 15,
-		color: "white",
 	},
 	button: {
 		margin: 30,
