@@ -7,18 +7,19 @@ import {
 	View
 } from "react-native";
 
-import TcpSocket from "react-native-tcp-socket";
-import { connectSocket } from "../utils";
-
 type Props = {
-	setClient: React.Dispatch<React.SetStateAction<TcpSocket.Socket | undefined>>,
+	setReconnect: React.Dispatch<React.SetStateAction<boolean>>,
+	setShowConnectModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const Reconnect = ({ setClient }: Props) => {
+export const Reconnect = ({ setReconnect, setShowConnectModal }: Props) => {
+	const connectPrompt = () => setShowConnectModal(true);
+
 	return (
 		<View style={styles.footer}>
 			<TouchableHighlight
-				onPress={() => setClient(connectSocket())}
+				onPress={() => setReconnect(true)}
+				onLongPress={connectPrompt}
 				underlayColor="#7A4988"
 				style={styles.refresh}
 			>

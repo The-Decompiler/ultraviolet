@@ -4,6 +4,7 @@ import { OpenKeyboard } from "./components/OpenKeyboard";
 import { MouseClick } from "./components/MouseClick";
 import { Reconnect } from "./components/Reconnect";
 import { Touchpad } from "./components/Touchpad";
+import { ConnectModal } from "./components/ConnectModal";
 
 import {
 	SafeAreaView,
@@ -16,22 +17,48 @@ import { connectSocket,
 				 terminateConnection
 } from "./utils";
 
+export type Address = {
+	port: number,
+	host: string,
+}
+
 const App = () => {
 	const [client, setClient] = useState<TcpSocket.Socket>();
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
+	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
+	const [showConnectModal, setShowConnectModal] = useState(false);
+	const [reconnect, setReconnect] = useState(false);
 
 	useEffect(() => {
-		setClient(connectSocket());
+		setClient(connectSocket(address));
 		return () => { terminateConnection(client) };
 	}, []);
+
+	useEffect(() => {
+		setClient(connectSocket(address));
+		setReconnect(false);
+		return () => { terminateConnection(client) };
+	}, [address, reconnect])
 
 	return (
 		<>
 			<SafeAreaView style={styles.scrollView}>
+				{ showConnectModal &&
+					<ConnectModal
+						setAddress={setAddress}
+						setShowConnectModal={setShowConnectModal}
+					/>
+				}
 				<Touchpad />
 				<MouseClick />
-				<Reconnect setClient={setClient} />
-				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
+				<Reconnect
+					setReconnect={setReconnect}
+					setShowConnectModal={setShowConnectModal}
+				/>
+				<OpenKeyboard
+					keyPress={keyPress}
+					setKeyPress={setKeyPress}
+				/>
 			</SafeAreaView>
 		</>
 	);
