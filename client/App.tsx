@@ -27,6 +27,7 @@ const App = () => {
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
 	const [showConnectModal, setShowConnectModal] = useState(false);
+	const [reconnect, setReconnect] = useState(false);
 
 	useEffect(() => {
 		setClient(connectSocket(address));
@@ -35,17 +36,29 @@ const App = () => {
 
 	useEffect(() => {
 		setClient(connectSocket(address));
+		setReconnect(false);
 		return () => { terminateConnection(client) };
-	}, [address])
+	}, [address, reconnect])
 
 	return (
 		<>
 			<SafeAreaView style={styles.scrollView}>
-				{ showConnectModal && <ConnectModal setAddress={setAddress} setShowConnectModal={setShowConnectModal} />}
+				{ showConnectModal &&
+					<ConnectModal
+						setAddress={setAddress}
+						setShowConnectModal={setShowConnectModal}
+					/>
+				}
 				<Touchpad />
 				<MouseClick />
-				<Reconnect setClient={setClient} setShowConnectModal={setShowConnectModal} />
-				<OpenKeyboard keyPress={keyPress} setKeyPress={setKeyPress} />
+				<Reconnect
+					setReconnect={setReconnect}
+					setShowConnectModal={setShowConnectModal}
+				/>
+				<OpenKeyboard
+					keyPress={keyPress}
+					setKeyPress={setKeyPress}
+				/>
 			</SafeAreaView>
 		</>
 	);
