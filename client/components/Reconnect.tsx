@@ -12,13 +12,17 @@ import { connectSocket } from "../utils";
 
 type Props = {
 	setClient: React.Dispatch<React.SetStateAction<TcpSocket.Socket | undefined>>,
+	setShowConnectModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const Reconnect = ({ setClient }: Props) => {
+export const Reconnect = ({ setClient, setShowConnectModal }: Props) => {
+	const connectPrompt = () => setShowConnectModal(true);
+
 	return (
 		<View style={styles.footer}>
 			<TouchableHighlight
 				onPress={() => setClient(connectSocket())}
+				onLongPress={connectPrompt}
 				underlayColor="#7A4988"
 				style={styles.refresh}
 			>
