@@ -1,16 +1,12 @@
 import React, { useState } from "react";
+import { MouseButtons, MouseClicks } from "../utils";
+import { mouseHandler } from "../utils";
 
 import {
 	StyleSheet,
 	TouchableHighlight,
 	View
 } from "react-native";
-
-enum MouseButtons {
-	LEFT = "LEFT",
-	MIDDLE = "MIDDLE",
-	RIGHT = "RIGHT"
-}
 
 export const MouseClick = () => {
 	const [toggleMouseLeft, setToggleMouseLeft] = useState(false);
@@ -21,15 +17,21 @@ export const MouseClick = () => {
 		switch (button) {
 			case MouseButtons.LEFT:
 				setToggleMouseLeft(toggleMouseLeft ? false : true);
-				console.log("left");
+				toggleMouseLeft
+					? mouseHandler(MouseClicks.RELEASE, MouseButtons.LEFT)
+					: mouseHandler(MouseClicks.PRESS, MouseButtons.LEFT);
 				break;
 			case MouseButtons.MIDDLE:
 				setToggleMouseMiddle(toggleMouseMiddle ? false : true);
-				console.log("middle");
+				toggleMouseMiddle
+					? mouseHandler(MouseClicks.RELEASE, MouseButtons.MIDDLE)
+					: mouseHandler(MouseClicks.PRESS, MouseButtons.MIDDLE);
 				break;
 			case MouseButtons.RIGHT:
 				setToggleMouseRight(toggleMouseRight ? false : true);
-				console.log("right");
+				toggleMouseRight
+					? mouseHandler(MouseClicks.RELEASE, MouseButtons.RIGHT)
+					: mouseHandler(MouseClicks.PRESS, MouseButtons.RIGHT);
 				break;
 		}
 	}
@@ -37,7 +39,9 @@ export const MouseClick = () => {
 	return (
 		<View style={styles.footer}>
 			<TouchableHighlight
-				onPress={() => console.log("Left Click")}
+				onPress={() => toggleMouseLeft
+											 ? toggleLongButtonHandler(MouseButtons.LEFT)
+											 : mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT)}
 				onLongPress={() => toggleLongButtonHandler(MouseButtons.LEFT)}
 				underlayColor="#758599"
 				style={
@@ -46,7 +50,9 @@ export const MouseClick = () => {
 			}><View /></TouchableHighlight>
 			<View style={styles.center}>
 				<TouchableHighlight
-					onPress={() => console.log("Middle Click")}
+					onPress={() => toggleMouseMiddle
+											 ? toggleLongButtonHandler(MouseButtons.MIDDLE)
+											 : mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE)}
 					onLongPress={() => toggleLongButtonHandler(MouseButtons.MIDDLE)}
 					underlayColor="#314155"
 					style={
@@ -55,7 +61,9 @@ export const MouseClick = () => {
 				}><View /></TouchableHighlight>
 			</View>
 			<TouchableHighlight
-				onPress={() => console.log("Right Click")}
+				onPress={() => toggleMouseRight
+											 ? toggleLongButtonHandler(MouseButtons.RIGHT)
+											 : mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT)}
 				onLongPress={() => toggleLongButtonHandler(MouseButtons.RIGHT)}
 				underlayColor="#758599"
 				style={
