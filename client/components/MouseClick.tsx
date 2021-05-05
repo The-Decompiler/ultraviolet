@@ -76,9 +76,8 @@ export const MouseClick = () => {
 
 const styles = StyleSheet.create({
 	center: {
-		width: "100%",
 		alignItems: "center",
-		zIndex: -1,
+		zIndex: 1,
 	},
 	footer: {
 		position: "absolute",
