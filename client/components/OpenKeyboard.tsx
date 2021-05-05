@@ -9,6 +9,7 @@ import {
 	TouchableHighlight
 } from "react-native";
 
+import { keyboardHandler } from "../utils";
 import { DEFAULT_TEXT_VALUE } from "../utils";
 
 type Props = {
@@ -32,7 +33,7 @@ export const OpenKeyboard = ({ keyPress, setKeyPress }: Props) => {
 
 	useEffect(() => {
 		if (keyPress != DEFAULT_TEXT_VALUE) {
-			// console.log("Send key " + keyPress + " to server");
+			keyboardHandler(keyPress);
 			setKeyPress(DEFAULT_TEXT_VALUE);
 		}
 	}, [keyPress]);

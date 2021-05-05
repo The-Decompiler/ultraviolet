@@ -2,6 +2,7 @@ import TcpSocket from "react-native-tcp-socket";
 import { Address } from "./App";
 
 export const DEFAULT_TEXT_VALUE = " ";
+const DEFAULT_STRING_LIMIT = 20;
 
 export enum MouseClicks {
 	CLICK = "c",
@@ -23,6 +24,16 @@ export type Position = {
 export type ScrollPosition = {
 	firstY: number,
 	secondY: number,
+}
+
+enum FunctionKey {
+	BACKSPACE = "backspace",
+	ENTER = "enter",
+}
+
+enum FunctionKeyNotation {
+	BACKSPACE = "",
+	ENTER = " \n",
 }
 
 export const connectSocket = ({ port, host }: Address) =>
@@ -63,6 +74,40 @@ export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) =
 	let scrollSecond = current.secondY - previous.secondY;
 	let distance = (scrollFirst + scrollSecond) / 2;
 	console.log("ms" + distance);
+}
+
+// Keyboard
+// kk<key...>      -- Key <enter, backspace>  [OpenKeyboard]
+// kt<text>        -- Type                    [OpenKeyboard]
+export const keyboardHandler = (keyPress: string) => {
+	// Function keys
+	if (keyPress == FunctionKeyNotation.BACKSPACE) {
+		console.log("kk" + FunctionKey.BACKSPACE);
+		return;
+	}
+	if (keyPress == FunctionKeyNotation.ENTER) {
+		console.log("kk" + FunctionKey.ENTER);
+		return;
+	}
+
+	keyPress = keyPress.substring(1, keyPress.length);
+	// Long string
+	let stringArray;
+	if (keyPress.length > DEFAULT_STRING_LIMIT) {
+		stringArray = limitString([], keyPress, DEFAULT_STRING_LIMIT);
+		for (let string in stringArray)
+			console.log("kt" + stringArray[string]);
+		return;
+	}
+	// Key presses
+	console.log("kt" + keyPress);
+	return;
+}
+
+const limitString = (limitedStrings: string[], string: string, limit: number) => {
+	limitedStrings.push(string.substring(0, limit));
+	if (string.length > limit) limitString(limitedStrings, string.substring(limit, string.length), limit);
+	return limitedStrings;
 }
 
 // Clicks and Holds and Releases
