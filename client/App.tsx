@@ -11,8 +11,6 @@ import {
 	StyleSheet
 } from "react-native";
 
-import TcpSocket from "react-native-tcp-socket";
-import { DEFAULT_TEXT_VALUE } from "./utils";
 import { connectSocket,
 				 terminateConnection
 } from "./utils";
@@ -23,21 +21,21 @@ export type Address = {
 }
 
 const App = () => {
-	const [client, setClient] = useState<TcpSocket.Socket>();
-	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
 	const [showConnectModal, setShowConnectModal] = useState(false);
 	const [reconnect, setReconnect] = useState(false);
 
 	useEffect(() => {
-		setClient(connectSocket(address));
-		return () => { terminateConnection(client) };
+		connectSocket(address);
+		return () => { terminateConnection() };
 	}, []);
 
 	useEffect(() => {
-		setClient(connectSocket(address));
-		setReconnect(false);
-		return () => { terminateConnection(client) };
+		if (reconnect) {
+			connectSocket(address);
+			setReconnect(false);
+			return () => { terminateConnection() };
+		}
 	}, [address, reconnect])
 
 	return (
@@ -55,10 +53,7 @@ const App = () => {
 					setReconnect={setReconnect}
 					setShowConnectModal={setShowConnectModal}
 				/>
-				<OpenKeyboard
-					keyPress={keyPress}
-					setKeyPress={setKeyPress}
-				/>
+				<OpenKeyboard />
 			</SafeAreaView>
 		</>
 	);

@@ -12,13 +12,8 @@ import {
 import { keyboardHandler } from "../utils";
 import { DEFAULT_TEXT_VALUE } from "../utils";
 
-type Props = {
-	keyPress: string,
-	setKeyPress: React.Dispatch<React.SetStateAction<string>>,
-}
-
-
-export const OpenKeyboard = ({ keyPress, setKeyPress }: Props) => {
+export const OpenKeyboard = () => {
+	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 	const [keyboardShowing, setKeyboardShowing] = useState(false);
 	const inputRef = useRef<TextInput>(null);
 

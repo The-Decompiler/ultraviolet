@@ -1,6 +1,7 @@
 import TcpSocket from "react-native-tcp-socket";
 import { Address } from "./App";
 
+export let client: TcpSocket.Socket;
 export const DEFAULT_TEXT_VALUE = " ";
 const DEFAULT_STRING_LIMIT = 20;
 
@@ -36,15 +37,16 @@ enum FunctionKeyNotation {
 	ENTER = " \n",
 }
 
-export const connectSocket = ({ port, host }: Address) =>
-	TcpSocket.createConnection({ port, host }, () => {});
+export const connectSocket = ({ port, host }: Address) => {
+	client = TcpSocket.createConnection({ port, host }, () => {});
+}
 
-export const terminateConnection = (client: TcpSocket.Socket | undefined) =>  {
+export const terminateConnection = () =>  {
 	if (client)
 		client.destroy();
 }
 
-export const sendMessage = (client: TcpSocket.Socket | undefined, msg: string) => {
+export const sendMessage = (msg: string) => {
 	if (client)
 		client.write(msg);
 }
@@ -65,7 +67,7 @@ export const convertIpAddress = (address: string): Address => {
 export const mouseMove = (previous: Position, current: Position) => {
 	let moveX = current.x - previous.x;
 	let moveY = current.y - previous.y;
-	console.log("mm" + moveX, moveY);
+	sendMessage("mm" + moveX + " " + moveY);
 }
 
 // ms<[-]distance> -- Scroll
@@ -73,7 +75,7 @@ export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) =
 	let scrollFirst = current.firstY - previous.firstY;
 	let scrollSecond = current.secondY - previous.secondY;
 	let distance = (scrollFirst + scrollSecond) / 2;
-	console.log("ms" + distance);
+	sendMessage("ms" + distance);
 }
 
 // Keyboard
@@ -82,11 +84,11 @@ export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) =
 export const keyboardHandler = (keyPress: string) => {
 	// Function keys
 	if (keyPress == FunctionKeyNotation.BACKSPACE) {
-		console.log("kk" + FunctionKey.BACKSPACE);
+		sendMessage("kk" + FunctionKey.BACKSPACE);
 		return;
 	}
 	if (keyPress == FunctionKeyNotation.ENTER) {
-		console.log("kk" + FunctionKey.ENTER);
+		sendMessage("kk" + FunctionKey.ENTER);
 		return;
 	}
 
@@ -96,11 +98,11 @@ export const keyboardHandler = (keyPress: string) => {
 	if (keyPress.length > DEFAULT_STRING_LIMIT) {
 		stringArray = limitString([], keyPress, DEFAULT_STRING_LIMIT);
 		for (let string in stringArray)
-			console.log("kt" + stringArray[string]);
+			sendMessage("kt" + stringArray[string]);
 		return;
 	}
 	// Key presses
-	console.log("kt" + keyPress);
+	sendMessage("kt" + keyPress);
 	return;
 }
 
@@ -115,5 +117,5 @@ const limitString = (limitedStrings: string[], string: string, limit: number) =>
 // mp<r|m|l>       -- Press
 // mr<r|m|l>       -- Release
 export const mouseHandler =  (click: MouseClicks, button: MouseButtons) => {
-	console.log("m" + click + button);
+	sendMessage("m" + click + button);
 }
