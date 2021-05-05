@@ -42,13 +42,21 @@ export const connectSocket = ({ port, host }: Address) => {
 }
 
 export const terminateConnection = () =>  {
-	if (client)
-		client.destroy();
+	try {
+		if (client)
+			client.destroy();
+	} catch (err) {
+		console.log("Error terminating connection:", err);
+	}
 }
 
 export const sendMessage = (msg: string) => {
-	if (client)
-		client.write(msg);
+	try {
+		if (client)
+			client.write(msg);
+	} catch (err) {
+		console.log("Error sending message", err);
+	}
 }
 
 export const convertIpAddress = (address: string): Address => {
