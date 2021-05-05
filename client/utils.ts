@@ -4,6 +4,7 @@ import { Address } from "./App";
 export let client: TcpSocket.Socket;
 export const DEFAULT_TEXT_VALUE = " ";
 const DEFAULT_STRING_LIMIT = 30;
+const DEFAULT_DECIMAL_PLACE = 2;
 
 export enum MouseClicks {
 	CLICK = "c",
@@ -70,11 +71,15 @@ export const convertIpAddress = (address: string): Address => {
 	}
 }
 
+const roundNumber = (num: number, places: number = DEFAULT_DECIMAL_PLACE) => {
+	let x = Math.pow(10, places);
+	return Math.round(num * x) / x;
+}
 // Touchpad Tap, Move, Release
 // mm<x> <y>       -- Move
 export const mouseMove = (previous: Position, current: Position) => {
-	let moveX = current.x - previous.x;
-	let moveY = current.y - previous.y;
+	let moveX = roundNumber(current.x - previous.x);
+	let moveY = roundNumber(current.y - previous.y);
 	sendMessage("mm" + moveX + " " + moveY);
 }
 
@@ -82,7 +87,7 @@ export const mouseMove = (previous: Position, current: Position) => {
 export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) => {
 	let scrollFirst = current.firstY - previous.firstY;
 	let scrollSecond = current.secondY - previous.secondY;
-	let distance = (scrollFirst + scrollSecond) / 2;
+	let distance = roundNumber((scrollFirst + scrollSecond) / 2);
 	sendMessage("ms" + distance);
 }
 
