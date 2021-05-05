@@ -49,6 +49,22 @@ export const convertIpAddress = (address: string): Address => {
 	}
 }
 
+// Touchpad Tap, Move, Release
+// mm<x> <y>       -- Move
+export const mouseMove = (previous: Position, current: Position) => {
+	let moveX = current.x - previous.x;
+	let moveY = current.y - previous.y;
+	console.log("mm" + moveX, moveY);
+}
+
+// ms<[-]distance> -- Scroll
+export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) => {
+	let scrollFirst = current.firstY - previous.firstY;
+	let scrollSecond = current.secondY - previous.secondY;
+	let distance = (scrollFirst + scrollSecond) / 2;
+	console.log("ms" + distance);
+}
+
 // Clicks and Holds and Releases
 // mc<r|m|l>       -- Click
 // mp<r|m|l>       -- Press
