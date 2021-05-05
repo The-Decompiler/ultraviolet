@@ -34,7 +34,7 @@ enum FunctionKey {
 
 enum FunctionKeyNotation {
 	BACKSPACE = "",
-	ENTER = " \n",
+	ENTER = "\n",
 }
 
 export const connectSocket = ({ port, host }: Address) => {
@@ -87,12 +87,12 @@ export const keyboardHandler = (keyPress: string) => {
 		sendMessage("kk" + FunctionKey.BACKSPACE);
 		return;
 	}
+	keyPress = keyPress.substring(1, keyPress.length);
 	if (keyPress == FunctionKeyNotation.ENTER) {
 		sendMessage("kk" + FunctionKey.ENTER);
 		return;
 	}
 
-	keyPress = keyPress.substring(1, keyPress.length);
 	// Long string
 	let stringArray;
 	if (keyPress.length > DEFAULT_STRING_LIMIT) {

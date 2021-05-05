@@ -40,7 +40,7 @@ export const Touchpad = () => {
 		setPosition(!isTwoFingers(event) ? getCurrentPosition(event) as Position : null);
 		// Scroll or move if set
 		if (prevScroll && scroll) mouseScroll(prevScroll, scroll);
-		if (prevPosition && position) mouseMove(prevPosition, position);
+		else if (prevPosition && position) mouseMove(prevPosition, position);
 		// Reset if RELEASE
 		if (responder == Responder.RELEASE) {
 			setPrevScroll(null);
