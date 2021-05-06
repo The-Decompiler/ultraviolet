@@ -13,14 +13,16 @@ import { convertIpAddress } from "../utils";
 
 type Props = {
 	setAddress: React.Dispatch<React.SetStateAction<Address>>,
+	setConnect: React.Dispatch<React.SetStateAction<boolean>>,
 	setShowConnectModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const ConnectModal = ({ setAddress, setShowConnectModal }: Props) => {
+export const ConnectModal = ({ setAddress, setConnect, setShowConnectModal }: Props) => {
 	const [tempAddress, setTempAddress] = useState("");
 
 	const connect = () => {
 		setAddress(convertIpAddress(tempAddress));
+		setConnect(true);
 		setShowConnectModal(false);
 	}
 

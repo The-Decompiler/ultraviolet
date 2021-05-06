@@ -39,6 +39,7 @@ enum FunctionKeyNotation {
 }
 
 export const connectSocket = ({ port, host }: Address) => {
+	terminateConnection();
 	client = TcpSocket.createConnection({ port, host }, () => {});
 }
 
