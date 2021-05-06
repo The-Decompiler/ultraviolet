@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
 		bottom: 25,
 		width: "100%",
 		alignItems: "center",
+		zIndex: 1,
 	},
 	refresh: {
 		width: 105,
