@@ -11,9 +11,7 @@ import {
 	StyleSheet
 } from "react-native";
 
-import { connectSocket,
-				 terminateConnection
-} from "./utils";
+import { connectSocket } from "./utils";
 
 export type Address = {
 	port: number,
@@ -23,20 +21,16 @@ export type Address = {
 const App = () => {
 	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
 	const [showConnectModal, setShowConnectModal] = useState(false);
-	const [reconnect, setReconnect] = useState(false);
+	const [connect, setConnect] = useState(false);
+
+	useEffect(() => connectSocket(address), []);
 
 	useEffect(() => {
-		connectSocket(address);
-		return () => { terminateConnection() };
-	}, []);
-
-	useEffect(() => {
-		if (reconnect) {
+		if (connect) {
 			connectSocket(address);
-			setReconnect(false);
-			return () => { terminateConnection() };
+			setConnect(false);
 		}
-	}, [address, reconnect])
+	}, [connect])
 
 	return (
 		<>
@@ -44,13 +38,14 @@ const App = () => {
 				{ showConnectModal &&
 					<ConnectModal
 						setAddress={setAddress}
+						setConnect={setConnect}
 						setShowConnectModal={setShowConnectModal}
 					/>
 				}
 				<Touchpad />
 				<MouseClick />
 				<Reconnect
-					setReconnect={setReconnect}
+					setConnect={setConnect}
 					setShowConnectModal={setShowConnectModal}
 				/>
 				<OpenKeyboard />

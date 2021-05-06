@@ -8,17 +8,17 @@ import {
 } from "react-native";
 
 type Props = {
-	setReconnect: React.Dispatch<React.SetStateAction<boolean>>,
+	setConnect: React.Dispatch<React.SetStateAction<boolean>>,
 	setShowConnectModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const Reconnect = ({ setReconnect, setShowConnectModal }: Props) => {
+export const Reconnect = ({ setConnect, setShowConnectModal }: Props) => {
 	const connectPrompt = () => setShowConnectModal(true);
 
 	return (
 		<View style={styles.footer}>
 			<TouchableHighlight
-				onPress={() => setReconnect(true)}
+				onPress={() => setConnect(true)}
 				onLongPress={connectPrompt}
 				underlayColor="#7A4988"
 				style={styles.refresh}
