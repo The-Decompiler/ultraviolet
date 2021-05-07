@@ -4,7 +4,7 @@ import { Address } from "./App";
 export let client: TcpSocket.Socket;
 export const DEFAULT_TEXT_VALUE = " ";
 const DEFAULT_STRING_LIMIT = 30;
-const DEFAULT_DECIMAL_PLACE = 2;
+const DEFAULT_DECIMAL_PLACE = 0;
 
 export enum MouseClicks {
 	CLICK = "c",
