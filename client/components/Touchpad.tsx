@@ -8,12 +8,9 @@ import { GestureResponderEvent,
 import { mouseMove, mouseScroll } from "../utils";
 import { Position, ScrollPosition } from "../utils";
 
-const MOVE_INTERVAL = 500;
-
 enum Responder { START, MOVE, RELEASE }
 
 export const Touchpad = () => {
-	const [time, setTime] = useState(Date.now().valueOf());
 	const [prevPosition, setPrevPosition] = useState<Position | null>(null);
 	const [position, setPosition] = useState<Position | null>(null);
 	const [prevScroll, setPrevScroll] = useState<ScrollPosition | null>(null);
@@ -50,20 +47,13 @@ export const Touchpad = () => {
 		}
 	}
 
-	const onResponderMove = (event: GestureResponderEvent) => {
-		if (Date.now().valueOf() - time > MOVE_INTERVAL) {
-			gestureHandler(Responder.MOVE, event);
-			setTime(Date.now().valueOf());
-		}
-	}
-
 	return (
 		<View
 			onStartShouldSetResponder={e => {
 				gestureHandler(Responder.START, e);
 				return true;
 			}}
-			onResponderMove={onResponderMove}
+			onResponderMove={e => gestureHandler(Responder.MOVE, e)}
 			onResponderRelease={e => gestureHandler(Responder.RELEASE, e)}
 			style={styles.fullscreen}
 		/>
@@ -73,6 +63,7 @@ export const Touchpad = () => {
 const styles = StyleSheet.create({
 	fullscreen: {
 		width: "100%",
-		height: "100%",
+		height: "80%",
+		zIndex: 1,
 	},
 });

@@ -51,11 +51,11 @@ export const OpenKeyboard = () => {
 					</TouchableHighlight>
 				</View>
 			}
-			<View>
+			<View style={styles.cornerFloat}>
 				<TouchableHighlight
 					onPress={handlePress}
 					underlayColor="#7A4988"
-					style={[styles.center, styles.cornerFloat, styles.button]}
+					style={[styles.center, styles.button]}
 				>
 					<Text style={{ color: "white" }}>/\</Text>
 				</TouchableHighlight>
@@ -64,6 +64,7 @@ export const OpenKeyboard = () => {
 				ref={inputRef}
 				onChangeText={setKeyPress}
 				value={keyPress}
+				autoCapitalize="none"
 				multiline={true}
 				style={[styles.invisible]}
 			/>
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
 		width: 50,
 		height: 50,
 		backgroundColor: "#710193",
-		borderRadius: 15
+		borderRadius: 15,
+		zIndex: 2,
 	}
 });
