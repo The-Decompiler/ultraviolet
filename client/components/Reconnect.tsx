@@ -23,7 +23,7 @@ export const Reconnect = ({ setConnect, setShowConnectModal }: Props) => {
 				underlayColor="#7A4988"
 				style={styles.refresh}
 			>
-				<Text style={styles.refreshText}>Reconnect</Text>
+				<Text style={styles.refreshText}>C</Text>
 			</TouchableHighlight>
 		</View>
 	);
@@ -32,18 +32,17 @@ export const Reconnect = ({ setConnect, setShowConnectModal }: Props) => {
 const styles = StyleSheet.create({
 	footer: {
 		position: "absolute",
+		left: 25,
 		bottom: 25,
-		width: "100%",
-		alignItems: "center",
 		zIndex: 1,
 	},
 	refresh: {
-		width: 105,
+		width: 50,
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: "#710193",
-		height: 40,
-		borderRadius: 20,
+		height: 50,
+		borderRadius: 15,
 	},
 	refreshText: {
 		fontSize: 15,

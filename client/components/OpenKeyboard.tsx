@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 	cornerFloat: {
 		position: "absolute",
 		right: 25,
-		bottom: 5
+		bottom: 25,
 	},
 	button: {
 		width: 50,
