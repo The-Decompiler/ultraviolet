@@ -77,33 +77,33 @@ const roundNumber = (num: number, places: number = DEFAULT_DECIMAL_PLACE) => {
 	return Math.round(num * x) / x;
 }
 // Touchpad Tap, Move, Release
-// mm<x> <y>       -- Move
+// m<x> <y>       -- Move
 export const mouseMove = (previous: Position, current: Position) => {
 	let moveX = roundNumber(current.x - previous.x);
 	let moveY = roundNumber(current.y - previous.y);
-	sendMessage("mm" + moveX + " " + moveY);
+	sendMessage("m" + moveX + " " + moveY);
 }
 
-// ms<[-]distance> -- Scroll
+// s<[-]distance> -- Scroll
 export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) => {
 	let scrollFirst = current.firstY - previous.firstY;
 	let scrollSecond = current.secondY - previous.secondY;
 	let distance = roundNumber((scrollFirst + scrollSecond) / 2);
-	sendMessage("ms" + distance);
+	sendMessage("s" + distance);
 }
 
 // Keyboard
-// kk<key...>      -- Key <enter, backspace>  [OpenKeyboard]
-// kt<text>        -- Type                    [OpenKeyboard]
+// k<key...>      -- Key <enter, backspace>  [OpenKeyboard]
+// t<text>        -- Type                    [OpenKeyboard]
 export const keyboardHandler = (keyPress: string) => {
 	// Function keys
 	if (keyPress == FunctionKeyNotation.BACKSPACE) {
-		sendMessage("kk" + FunctionKey.BACKSPACE);
+		sendMessage("k" + FunctionKey.BACKSPACE);
 		return;
 	}
 	keyPress = keyPress.substring(1, keyPress.length);
 	if (keyPress == FunctionKeyNotation.ENTER) {
-		sendMessage("kk" + FunctionKey.ENTER);
+		sendMessage("k" + FunctionKey.ENTER);
 		return;
 	}
 
@@ -112,11 +112,11 @@ export const keyboardHandler = (keyPress: string) => {
 	if (keyPress.length > DEFAULT_STRING_LIMIT) {
 		stringArray = limitString([], keyPress, DEFAULT_STRING_LIMIT);
 		for (let string in stringArray)
-			sendMessage("kt" + stringArray[string]);
+			sendMessage("t" + stringArray[string]);
 		return;
 	}
 	// Key presses
-	sendMessage("kt" + keyPress);
+	sendMessage("t" + keyPress);
 	return;
 }
 
@@ -127,9 +127,9 @@ const limitString = (limitedStrings: string[], string: string, limit: number) =>
 }
 
 // Clicks and Holds and Releases
-// mc<r|m|l>       -- Click
-// mp<r|m|l>       -- Press
-// mr<r|m|l>       -- Release
+// c<r|m|l>       -- Click
+// p<r|m|l>       -- Press
+// r<r|m|l>       -- Release
 export const mouseHandler =  (click: MouseClicks, button: MouseButtons) => {
-	sendMessage("m" + click + button);
+	sendMessage(click + button);
 }
