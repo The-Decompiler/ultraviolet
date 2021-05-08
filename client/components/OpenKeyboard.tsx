@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import {
 	Keyboard,
+	Platform,
 	StyleSheet,
 	View,
 	Text,
@@ -45,7 +46,7 @@ export const OpenKeyboard = () => {
 
 	return (
 		<>
-			{ keyboardShowing &&
+			{ (keyboardShowing && (Platform.OS != "android")) &&
 				<View style={styles.top}>
 					<TouchableHighlight
 						onPress={Keyboard.dismiss}
