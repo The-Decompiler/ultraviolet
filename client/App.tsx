@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { connectSocket } from "./utils";
+import { DEFAULT_ADDRESS } from "./utils";
 
 export type Address = {
 	port: number,
@@ -19,7 +20,7 @@ export type Address = {
 }
 
 const App = () => {
-	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
+	const [address, setAddress] = useState<Address>(DEFAULT_ADDRESS);
 	const [showConnectModal, setShowConnectModal] = useState(false);
 	const [connect, setConnect] = useState(false);
 
@@ -37,6 +38,7 @@ const App = () => {
 			<SafeAreaView style={styles.scrollView}>
 				{ showConnectModal &&
 					<ConnectModal
+						address={address}
 						setAddress={setAddress}
 						setConnect={setConnect}
 						setShowConnectModal={setShowConnectModal}

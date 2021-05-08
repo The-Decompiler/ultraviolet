@@ -3,6 +3,7 @@ import { Address } from "./App";
 
 export let client: TcpSocket.Socket;
 export const DEFAULT_TEXT_VALUE = " ";
+export const DEFAULT_ADDRESS: Address = { port: 27001, host: "localhost" };
 const DEFAULT_STRING_LIMIT = 30;
 const DEFAULT_DECIMAL_PLACE = 0;
 
@@ -64,12 +65,19 @@ export const sendMessage = (msg: string) => {
 export const convertIpAddress = (address: string): Address => {
 	try {
 		let [host, portString] = address.split(":", 2);
-		let port = parseInt(portString);
-		return { port, host };
+		let port;
+		if (!isNaN(parseInt(portString))) {
+			port = parseInt(portString)
+		} else throw "Port is invalid";
+		return ({ port, host } as Address);
 	} catch (err) {
 		console.log("Incorrect address:", err);
-		return { port: 27001, host: "localhost" }
+		return DEFAULT_ADDRESS;
 	}
+}
+
+export const addressToString = (address: Address): string => {
+	return address.host + ":" + address.port;
 }
 
 const roundNumber = (num: number, places: number = DEFAULT_DECIMAL_PLACE) => {

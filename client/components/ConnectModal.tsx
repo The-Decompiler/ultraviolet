@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
 	StyleSheet,
@@ -9,16 +9,20 @@ import {
 } from "react-native";
 
 import { Address } from "../App";
-import { convertIpAddress } from "../utils";
+import { convertIpAddress, addressToString } from "../utils";
+import { DEFAULT_ADDRESS } from "../utils";
 
 type Props = {
+	address: Address,
 	setAddress: React.Dispatch<React.SetStateAction<Address>>,
 	setConnect: React.Dispatch<React.SetStateAction<boolean>>,
 	setShowConnectModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const ConnectModal = ({ setAddress, setConnect, setShowConnectModal }: Props) => {
+export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectModal }: Props) => {
 	const [tempAddress, setTempAddress] = useState("");
+
+	useEffect(() => setTempAddress((address == DEFAULT_ADDRESS) ? "" : addressToString(address)), []);
 
 	const connect = () => {
 		setAddress(convertIpAddress(tempAddress));
@@ -34,8 +38,8 @@ export const ConnectModal = ({ setAddress, setConnect, setShowConnectModal }: Pr
 					<TextInput
 						onChangeText={setTempAddress}
 						style={styles.input}
-						placeholder="192.168.1.1:8080"
-						defaultValue=""
+						placeholder={addressToString(DEFAULT_ADDRESS)}
+						defaultValue={(address == DEFAULT_ADDRESS) ? "" : addressToString(address)}
 					/>
 				</View>
 				<View style={styles.center}>
