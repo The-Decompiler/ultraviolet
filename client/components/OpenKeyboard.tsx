@@ -36,7 +36,12 @@ export const OpenKeyboard = () => {
 	const showKeyboard = () => setKeyboardShowing(true);
 	const hideKeyboard = () => setKeyboardShowing(false);
 
-	const handlePress = () => inputRef.current && inputRef.current.focus();
+	const handlePress = () => {
+		if (inputRef.current) {
+			inputRef.current.blur()
+			inputRef.current.focus();
+		}
+	}
 
 	return (
 		<>
