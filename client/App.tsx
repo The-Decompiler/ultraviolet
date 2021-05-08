@@ -7,11 +7,13 @@ import { Touchpad } from "./components/Touchpad";
 import { ConnectModal } from "./components/ConnectModal";
 
 import {
+	AsyncStorage,
 	SafeAreaView,
 	StyleSheet
 } from "react-native";
 
-import { connectSocket } from "./utils";
+import { addressToString, connectSocket, convertIpAddress } from "./utils";
+import { DEFAULT_ADDRESS } from "./utils";
 
 export type Address = {
 	port: number,
@@ -19,14 +21,32 @@ export type Address = {
 }
 
 const App = () => {
-	const [address, setAddress] = useState<Address>({ port: 27001, host: "localhost" });
+	const [address, setAddress] = useState<Address>(DEFAULT_ADDRESS);
 	const [showConnectModal, setShowConnectModal] = useState(false);
 	const [connect, setConnect] = useState(false);
 
-	useEffect(() => connectSocket(address), []);
+	useEffect(() => {
+		(async () => {
+			try {
+				const value = await AsyncStorage.getItem("address");
+				if (value !== null)
+					setAddress(convertIpAddress(value));
+			} catch (err) {
+				console.log(err);
+			}
+		})()
+		connectSocket(address)
+	}, []);
 
 	useEffect(() => {
 		if (connect) {
+			(async () => {
+				try {
+					await AsyncStorage.setItem("address", addressToString(address));
+				} catch (err) {
+					console.log(err);
+				}
+			})()
 			connectSocket(address);
 			setConnect(false);
 		}
@@ -37,6 +57,7 @@ const App = () => {
 			<SafeAreaView style={styles.scrollView}>
 				{ showConnectModal &&
 					<ConnectModal
+						address={address}
 						setAddress={setAddress}
 						setConnect={setConnect}
 						setShowConnectModal={setShowConnectModal}
