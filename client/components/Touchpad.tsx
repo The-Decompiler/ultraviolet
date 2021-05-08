@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
 	fullscreen: {
 		width: "100%",
 		height: "75%",
-		zIndex: 1,
+		zIndex: 0,
 	},
 });
