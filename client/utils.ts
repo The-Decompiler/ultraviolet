@@ -89,7 +89,8 @@ const roundNumber = (num: number, places: number = DEFAULT_DECIMAL_PLACE) => {
 export const mouseMove = (previous: Position, current: Position) => {
 	let moveX = roundNumber(current.x - previous.x);
 	let moveY = roundNumber(current.y - previous.y);
-	sendMessage("m" + moveX + " " + moveY);
+	if ((moveX != 0) && (moveY != 0))
+		sendMessage("m" + moveX + " " + moveY);
 }
 
 // s<[-]distance> -- Scroll
@@ -97,7 +98,8 @@ export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) =
 	let scrollFirst = current.firstY - previous.firstY;
 	let scrollSecond = current.secondY - previous.secondY;
 	let distance = roundNumber((scrollFirst + scrollSecond) / 2);
-	sendMessage("s" + distance);
+	if (distance != 0)
+		sendMessage("s" + distance);
 }
 
 // Keyboard
