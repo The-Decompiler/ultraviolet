@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import {
+	BackHandler,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -23,6 +24,17 @@ export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectMo
 	const [tempAddress, setTempAddress] = useState("");
 
 	useEffect(() => setTempAddress((address == DEFAULT_ADDRESS) ? "" : addressToString(address)), []);
+	const disableModal = () => {
+		setShowConnectModal(false);
+		return true;
+	}
+
+	useEffect(() => {
+		BackHandler.addEventListener("hardwareBackPress", disableModal);
+		return () => {
+			BackHandler.removeEventListener("hardwareBackPress", disableModal);
+		};
+	}, []);
 
 	const connect = () => {
 		setAddress(convertIpAddress(tempAddress));
