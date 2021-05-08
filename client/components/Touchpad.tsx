@@ -63,7 +63,7 @@ export const Touchpad = () => {
 const styles = StyleSheet.create({
 	fullscreen: {
 		width: "100%",
-		height: "80%",
+		height: "75%",
 		zIndex: 1,
 	},
 });
