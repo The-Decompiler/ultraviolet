@@ -5,21 +5,33 @@ import { GestureResponderEvent,
 				 View
 } from "react-native";
 
-import { mouseMove, mouseScroll } from "../utils";
-import { Position, ScrollPosition } from "../utils";
+import { mouseMove, mouseScroll, mouseHandler } from "../utils";
+import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
 
 enum Responder { START, MOVE, RELEASE }
+enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE }
 
-export const Touchpad = () => {
+const TAP_INTERVAL = 250;
+
+type Props = {
+	toggleLongButtonHandler: (button: MouseButtons, turn?: boolean | null) => void,
+	toggleMouseLeft: boolean,
+	toggleMouseMiddle: boolean,
+	toggleMouseRight: boolean,
+}
+
+export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
 	const [prevPosition, setPrevPosition] = useState<Position | null>(null);
 	const [position, setPosition] = useState<Position | null>(null);
 	const [prevScroll, setPrevScroll] = useState<ScrollPosition | null>(null);
 	const [scroll, setScroll] = useState<ScrollPosition | null>(null);
+	const [tap, setTap] = useState<Tap | null>(null);
+	const [time, setTime] = useState(Date.now().valueOf());
 
-	const isTwoFingers = (event: GestureResponderEvent) => event.nativeEvent.touches.length == 2;
+	const isNumFingers = (finger: number, event: GestureResponderEvent) => event.nativeEvent.touches.length == finger;
 
 	const getCurrentPosition = (event: GestureResponderEvent)=> {
-		if (isTwoFingers(event))
+		if (isNumFingers(2, event))
 			return ({ firstY: event.nativeEvent.touches[0].pageY,
 								secondY: event.nativeEvent.touches[1].pageY } as ScrollPosition)
 		else
@@ -27,23 +39,51 @@ export const Touchpad = () => {
 	}
 
 	const gestureHandler = (responder: Responder, event: GestureResponderEvent) => {
-		// Set if not START and uses two fingers
-		setPrevScroll((!(responder == Responder.START) && isTwoFingers(event)) ? scroll : null);
-		// Set if uses two fingers
-		setScroll(isTwoFingers(event) ? getCurrentPosition(event) as ScrollPosition : null);
-		// Set if not START and does not use two fingers
-		setPrevPosition((!(responder == Responder.START) && !isTwoFingers(event)) ? position : null);
-		// Set if does not use two fingers
-		setPosition(!isTwoFingers(event) ? getCurrentPosition(event) as Position : null);
-		// Scroll or move if set
-		if (prevScroll && scroll) mouseScroll(prevScroll, scroll);
-		else if (prevPosition && position) mouseMove(prevPosition, position);
+		if (responder == Responder.START) {
+			if (isNumFingers(1, event)) setTap(Tap.One);
+			if (isNumFingers(2, event)) setTap(Tap.Two);
+			if (isNumFingers(3, event)) setTap(Tap.Three);
+			setTime(Date.now().valueOf());
+		}
+
+		if (responder == Responder.MOVE) {
+			// Set if not START and uses two fingers
+			setPrevScroll(isNumFingers(2, event) ? scroll : null);
+			// Set if uses two fingers
+			setScroll(isNumFingers(2, event) ? getCurrentPosition(event) as ScrollPosition : null);
+			// Set if not START and does not use two fingers
+			setPrevPosition(isNumFingers(1, event) ? position : null);
+			// Set if does not use two fingers
+			setPosition(!isNumFingers(2, event) ? getCurrentPosition(event) as Position : null);
+			// Scroll or move if set
+			if (prevScroll && scroll) mouseScroll(prevScroll, scroll);
+			else if (prevPosition && position) mouseMove(prevPosition, position);
+		}
 		// Reset if RELEASE
 		if (responder == Responder.RELEASE) {
 			setPrevScroll(null);
 			setScroll(null);
 			setPrevPosition(null);
 			setPosition(null);
+
+			if (Date.now().valueOf() - time < TAP_INTERVAL) {
+				if (tap)
+					switch ((tap as unknown) as MouseButtons) {
+						case MouseButtons.LEFT:
+							if (toggleMouseLeft) toggleLongButtonHandler(MouseButtons.LEFT)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT);
+							break;
+						case MouseButtons.MIDDLE:
+							if (toggleMouseMiddle) toggleLongButtonHandler(MouseButtons.MIDDLE)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE);
+							break;
+						case MouseButtons.RIGHT:
+							if (toggleMouseRight) toggleLongButtonHandler(MouseButtons.RIGHT)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT);
+							break;
+					}
+			}
+			setTap(null);
 		}
 	}
 
