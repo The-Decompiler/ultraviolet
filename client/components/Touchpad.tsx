@@ -9,7 +9,7 @@ import { mouseMove, mouseScroll, mouseHandler } from "../utils";
 import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
 
 enum Responder { START, MOVE, RELEASE }
-enum Tap { One, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE, Double = MouseButtons.LEFT }
+enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE }
 
 const TAP_INTERVAL = 250;
 
@@ -33,11 +33,7 @@ export const Touchpad = () => {
 
 	const gestureHandler = (responder: Responder, event: GestureResponderEvent) => {
 		if (responder == Responder.START) {
-			if (isNumFingers(1, event))
-				if (tap == Tap.One)
-					setTap(Tap.Double);
-				else
-					setTap(Tap.One);
+			if (isNumFingers(1, event)) setTap(Tap.One);
 			if (isNumFingers(2, event)) setTap(Tap.Two);
 			if (isNumFingers(3, event)) setTap(Tap.Three);
 			setTime(Date.now().valueOf());
@@ -64,8 +60,8 @@ export const Touchpad = () => {
 			setPosition(null);
 
 			if (Date.now().valueOf() - time < TAP_INTERVAL)
-				(tap && tap != Tap.One) && mouseHandler(MouseClicks.CLICK, ((tap as unknown) as MouseButtons));
-			(tap != Tap.One) && setTap(null);
+				tap && mouseHandler(MouseClicks.CLICK, ((tap as unknown) as MouseButtons));
+			setTap(null);
 		}
 	}
 
