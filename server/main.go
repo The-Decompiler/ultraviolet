@@ -59,7 +59,7 @@ func getMouseButton(b byte) (string, error) {
 	case 'r':
 		button = "right"
 	case 'm':
-		button = "middle"
+		button = "center"
 	case 'l':
 		button = "left"
 	default:
