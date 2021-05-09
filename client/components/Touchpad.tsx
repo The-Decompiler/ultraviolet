@@ -13,7 +13,14 @@ enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButto
 
 const TAP_INTERVAL = 250;
 
-export const Touchpad = () => {
+type Props = {
+	toggleLongButtonHandler: (button: MouseButtons, turn?: boolean | null) => void,
+	toggleMouseLeft: boolean,
+	toggleMouseMiddle: boolean,
+	toggleMouseRight: boolean,
+}
+
+export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
 	const [prevPosition, setPrevPosition] = useState<Position | null>(null);
 	const [position, setPosition] = useState<Position | null>(null);
 	const [prevScroll, setPrevScroll] = useState<ScrollPosition | null>(null);
@@ -59,8 +66,23 @@ export const Touchpad = () => {
 			setPrevPosition(null);
 			setPosition(null);
 
-			if (Date.now().valueOf() - time < TAP_INTERVAL)
-				tap && mouseHandler(MouseClicks.CLICK, ((tap as unknown) as MouseButtons));
+			if (Date.now().valueOf() - time < TAP_INTERVAL) {
+				if (tap)
+					switch ((tap as unknown) as MouseButtons) {
+						case MouseButtons.LEFT:
+							if (toggleMouseLeft) toggleLongButtonHandler(MouseButtons.LEFT)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT);
+							break;
+						case MouseButtons.MIDDLE:
+							if (toggleMouseMiddle) toggleLongButtonHandler(MouseButtons.MIDDLE)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE);
+							break;
+						case MouseButtons.RIGHT:
+							if (toggleMouseRight) toggleLongButtonHandler(MouseButtons.RIGHT)
+							else mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT);
+							break;
+					}
+			}
 			setTap(null);
 		}
 	}

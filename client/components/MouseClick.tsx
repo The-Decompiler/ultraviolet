@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React  from "react";
 import { MouseButtons, MouseClicks } from "../utils";
 import { mouseHandler } from "../utils";
 
@@ -8,34 +8,14 @@ import {
 	View
 } from "react-native";
 
-export const MouseClick = () => {
-	const [toggleMouseLeft, setToggleMouseLeft] = useState(false);
-	const [toggleMouseMiddle, setToggleMouseMiddle] = useState(false);
-	const [toggleMouseRight, setToggleMouseRight] = useState(false);
+type Props = {
+	toggleLongButtonHandler: (button: MouseButtons, turn?: boolean | null) => void,
+	toggleMouseLeft: boolean,
+	toggleMouseMiddle: boolean,
+	toggleMouseRight: boolean,
+}
 
-	const toggleLongButtonHandler = (button: MouseButtons) => {
-		switch (button) {
-			case MouseButtons.LEFT:
-				setToggleMouseLeft(toggleMouseLeft ? false : true);
-				toggleMouseLeft
-					? mouseHandler(MouseClicks.RELEASE, MouseButtons.LEFT)
-					: mouseHandler(MouseClicks.PRESS, MouseButtons.LEFT);
-				break;
-			case MouseButtons.MIDDLE:
-				setToggleMouseMiddle(toggleMouseMiddle ? false : true);
-				toggleMouseMiddle
-					? mouseHandler(MouseClicks.RELEASE, MouseButtons.MIDDLE)
-					: mouseHandler(MouseClicks.PRESS, MouseButtons.MIDDLE);
-				break;
-			case MouseButtons.RIGHT:
-				setToggleMouseRight(toggleMouseRight ? false : true);
-				toggleMouseRight
-					? mouseHandler(MouseClicks.RELEASE, MouseButtons.RIGHT)
-					: mouseHandler(MouseClicks.PRESS, MouseButtons.RIGHT);
-				break;
-		}
-	}
-
+export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
 	return (
 		<View style={styles.footer}>
 			<TouchableHighlight
