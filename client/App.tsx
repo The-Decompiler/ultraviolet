@@ -8,6 +8,8 @@ import { ConnectModal } from "./components/ConnectModal";
 
 import {
 	AsyncStorage,
+	Dimensions,
+	Image,
 	SafeAreaView,
 	StyleSheet
 } from "react-native";
@@ -83,6 +85,10 @@ const App = () => {
 	return (
 		<>
 			<SafeAreaView style={styles.scrollView}>
+				<Image
+					source={require("./static/AppLogo.png")}
+					style={styles.logo}
+				/>
 				{ showConnectModal &&
 					<ConnectModal
 						address={address}
@@ -115,9 +121,14 @@ const App = () => {
 
 const styles = StyleSheet.create({
 	scrollView: {
-		backgroundColor: "#333333",
+		backgroundColor: "#321B5A",
 		width: "100%",
 		height: "100%",
+	},
+	logo: {
+		position: "absolute",
+		top: "30%",
+		left: ((100 - Math.round((104 / Dimensions.get("window").width) * 100)) / 2).toString() + "%",
 	},
 });
 
