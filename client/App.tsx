@@ -7,12 +7,13 @@ import { Touchpad } from "./components/Touchpad";
 import { ConnectModal } from "./components/ConnectModal";
 
 import {
-	AsyncStorage,
 	Dimensions,
 	Image,
 	SafeAreaView,
 	StyleSheet
 } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { addressToString, connectSocket, convertIpAddress, mouseHandler } from "./utils";
 import { MouseButtons, MouseClicks } from "./utils";
