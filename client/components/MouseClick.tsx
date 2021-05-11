@@ -1,10 +1,11 @@
-import React  from "react";
+import React, { useState } from "react";
 import { MouseButtons, MouseClicks } from "../utils";
 import { mouseHandler } from "../utils";
 
 import {
+	Image,
 	StyleSheet,
-	TouchableHighlight,
+	TouchableWithoutFeedback,
 	View
 } from "react-native";
 
@@ -16,40 +17,60 @@ type Props = {
 }
 
 export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
+	const [clickedButton, setClickedButton] = useState<MouseButtons | null>(null);
+
+	const handleClick = (button: MouseButtons) => {
+		setClickedButton(button);
+		setTimeout(() => setClickedButton(null), 100);
+		mouseHandler(MouseClicks.CLICK, button);
+	}
+
 	return (
 		<View style={styles.footer}>
-			<TouchableHighlight
+			<TouchableWithoutFeedback
 				onPress={() => toggleMouseLeft
 											 ? toggleLongButtonHandler(MouseButtons.LEFT)
-											 : mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT)}
+											 : handleClick(MouseButtons.LEFT)}
 				onLongPress={() => toggleLongButtonHandler(MouseButtons.LEFT)}
-				underlayColor="#758599"
-				style={
-				[styles.leftClick,
-				 toggleMouseLeft && styles.primaryColorDisable]
-			}><View /></TouchableHighlight>
+			>
+				<Image
+					source={(toggleMouseLeft || (clickedButton == MouseButtons.LEFT))
+						? require("../static/MouseLeftPressed.png")
+						: require("../static/MouseLeft.png")
+					}
+					style={styles.leftClick}
+				/>
+			</TouchableWithoutFeedback>
 			<View style={styles.center}>
-				<TouchableHighlight
+				<TouchableWithoutFeedback
 					onPress={() => toggleMouseMiddle
 											 ? toggleLongButtonHandler(MouseButtons.MIDDLE)
-											 : mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE)}
+											 : handleClick(MouseButtons.MIDDLE)}
 					onLongPress={() => toggleLongButtonHandler(MouseButtons.MIDDLE)}
-					underlayColor="#314155"
-					style={
-					[styles.middleClick,
-					 toggleMouseMiddle && styles.secondaryColorDisable]
-				}><View /></TouchableHighlight>
+				>
+					<Image
+						source={(toggleMouseMiddle || (clickedButton == MouseButtons.MIDDLE))
+							? require("../static/MiddleButtonPressed.png")
+							: require("../static/MiddleButton.png")
+						}
+						style={styles.middleClick}
+					/>
+				</TouchableWithoutFeedback>
 			</View>
-			<TouchableHighlight
+			<TouchableWithoutFeedback
 				onPress={() => toggleMouseRight
 											 ? toggleLongButtonHandler(MouseButtons.RIGHT)
-											 : mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT)}
+											 : handleClick(MouseButtons.RIGHT)}
 				onLongPress={() => toggleLongButtonHandler(MouseButtons.RIGHT)}
-				underlayColor="#758599"
-				style={
-				[styles.rightClick,
-				 toggleMouseRight && styles.primaryColorDisable]
-				}><View /></TouchableHighlight>
+			>
+				<Image
+					source={(toggleMouseRight || (clickedButton == MouseButtons.RIGHT))
+						? require("../static/MouseRightPressed.png")
+						: require("../static/MouseRight.png")
+					}
+					style={styles.rightClick}
+				/>
+			</TouchableWithoutFeedback>
 		</View>
 	)
 }
@@ -69,27 +90,20 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 0,
 		width: 90,
-		height: 200,
-		left: "25%",
-		backgroundColor: "darkgray",
-	},
-	primaryColorDisable: {
-		backgroundColor: "#758599"
-	},
-	secondaryColorDisable: {
-		backgroundColor: "#314155"
+		height: 212,
+		right: "50%"
 	},
 	middleClick: {
-		width: 25,
-		height: 210,
-		backgroundColor: "black",
+		position: "absolute",
+		bottom: 0,
+		width: 38,
+		height: 146,
 	},
 	rightClick: {
 		position: "absolute",
 		bottom: 0,
 		width: 90,
-		height: 200,
-		right: "25%",
-		backgroundColor: "darkgray",
+		height: 212,
+		left: "50%",
 	},
 });
