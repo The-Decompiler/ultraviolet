@@ -78,7 +78,6 @@ export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMou
 const styles = StyleSheet.create({
 	center: {
 		alignItems: "center",
-		zIndex: 1,
 	},
 	footer: {
 		position: "absolute",
@@ -91,7 +90,8 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: 90,
 		height: 212,
-		right: "49.5%"
+		right: "49.5%",
+		zIndex: -1,
 	},
 	middleClick: {
 		position: "absolute",
@@ -105,5 +105,6 @@ const styles = StyleSheet.create({
 		width: 90,
 		height: 212,
 		left: "49.5%",
+		zIndex: -1,
 	},
 });
