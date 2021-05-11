@@ -1,21 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import {
+	Dimensions,
+	Image,
 	Keyboard,
 	Platform,
 	StyleSheet,
-	View,
-	Text,
 	TextInput,
-	TouchableHighlight
+	TouchableWithoutFeedback,
+	View
 } from "react-native";
 
 import { keyboardHandler } from "../utils";
 import { DEFAULT_TEXT_VALUE } from "../utils";
 
+enum KeyboardButtons { Up, Down }
+
 export const OpenKeyboard = () => {
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 	const [keyboardShowing, setKeyboardShowing] = useState(false);
+	const [clickedButton, setClickedButton] = useState<KeyboardButtons | null>(null);
 	const inputRef = useRef<TextInput>(null);
 
 	useEffect(() => {
@@ -38,8 +42,10 @@ export const OpenKeyboard = () => {
 	const hideKeyboard = () => setKeyboardShowing(false);
 
 	const handlePress = () => {
+		setClickedButton(KeyboardButtons.Up);
+		setTimeout(() => setClickedButton(null), 150);
 		if (inputRef.current) {
-			inputRef.current.blur()
+			inputRef.current.blur();
 			inputRef.current.focus();
 		}
 	}
@@ -47,24 +53,34 @@ export const OpenKeyboard = () => {
 	return (
 		<>
 			{ (keyboardShowing && (Platform.OS != "android")) &&
-				<View style={styles.top}>
-					<TouchableHighlight
-						onPress={Keyboard.dismiss}
-						underlayColor="#7A4988"
-						style={[styles.center, styles.button]}
+				<View style={[styles.center, styles.topFloat, styles.button]}>
+					<TouchableWithoutFeedback
+						onPress={() => {
+							setClickedButton(KeyboardButtons.Down);
+							setTimeout(() => setClickedButton(null), 150);
+							Keyboard.dismiss();
+						}}
 					>
-						<Text style={{ color: "white" }}>X</Text>
-					</TouchableHighlight>
+						<Image
+							source={(clickedButton == KeyboardButtons.Down)
+								? require("../static/KeyboardDownButtonPressed.png")
+								: require("../static/KeyboardDownButton.png")
+							}
+						/>
+					</TouchableWithoutFeedback>
 				</View>
 			}
-			<View style={styles.cornerFloat}>
-				<TouchableHighlight
+			<View style={[styles.center, styles.cornerFloat, styles.button]}>
+				<TouchableWithoutFeedback
 					onPress={handlePress}
-					underlayColor="#7A4988"
-					style={[styles.center, styles.button]}
 				>
-					<Text style={{ color: "white" }}>/\</Text>
-				</TouchableHighlight>
+					<Image
+						source={(clickedButton == KeyboardButtons.Up)
+							? require("../static/KeyboardUpButtonPressed.png")
+							: require("../static/KeyboardUpButton.png")
+						}
+					/>
+				</TouchableWithoutFeedback>
 			</View>
 			<TextInput
 				ref={inputRef}
@@ -72,25 +88,22 @@ export const OpenKeyboard = () => {
 				value={keyPress}
 				autoCapitalize="none"
 				multiline={true}
-				style={[styles.invisible]}
+				style={styles.invisible}
 			/>
 		</>
 	);
 }
 
 const styles = StyleSheet.create({
-	invisible: {
-		display: "none",
-	},
-	top: {
-		position: "absolute",
-		top: 50,
-		width: "100%",
-		alignItems: "center",
-	},
 	center: {
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "center",
+		zIndex: 2,
+	},
+	topFloat: {
+		position: "absolute",
+		top: 50,
+		left: ((100 - Math.round((71 / Dimensions.get("window").width) * 100)) / 2).toString() + "%",
 	},
 	cornerFloat: {
 		position: "absolute",
@@ -98,10 +111,10 @@ const styles = StyleSheet.create({
 		bottom: 25,
 	},
 	button: {
-		width: 50,
-		height: 50,
-		backgroundColor: "#710193",
-		borderRadius: 15,
-		zIndex: 2,
-	}
+		width: 71,
+		height: 71,
+	},
+	invisible: {
+		display: "none",
+	},
 });

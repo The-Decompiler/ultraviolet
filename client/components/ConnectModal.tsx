@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import {
 	BackHandler,
+	Image,
 	StyleSheet,
 	Text,
 	TextInput,
-	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View
 } from "react-native";
 
@@ -22,6 +23,7 @@ type Props = {
 
 export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectModal }: Props) => {
 	const [tempAddress, setTempAddress] = useState("");
+	const [clickedButton, setClickedButton] = useState(false);
 
 	useEffect(() => setTempAddress((address == DEFAULT_ADDRESS) ? "" : addressToString(address)), []);
 	const disableModal = () => {
@@ -37,27 +39,36 @@ export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectMo
 	}, []);
 
 	const connect = () => {
+		setClickedButton(true);
+		setTimeout(() => setClickedButton(false), 150);
 		setAddress(convertIpAddress(tempAddress));
 		setConnect(true);
 		setShowConnectModal(false);
 	}
 
 	return (
-		<View style={styles.fillScreen}>
+		<View style={{ zIndex: 1000 }}>
+			<View style={styles.fillScreen} />
 			<View style={styles.modal}>
 				<View style={styles.center}>
 					<Text style={styles.title}>Enter IP Address</Text>
 					<TextInput
 						onChangeText={setTempAddress}
-						style={styles.input}
 						placeholder={addressToString(DEFAULT_ADDRESS)}
 						defaultValue={(address == DEFAULT_ADDRESS) ? "" : addressToString(address)}
+						style={styles.input}
 					/>
 				</View>
 				<View style={styles.center}>
-					<TouchableOpacity onPress={connect} style={styles.button}>
-						<Text style={styles.buttonText}>CONNECT</Text>
-					</TouchableOpacity>
+					<TouchableWithoutFeedback onPress={connect}>
+						<Image
+							source={clickedButton
+								? require("../static/ConnectModalButtonPressed.png")
+								: require("../static/ConnectModalButton.png")
+							}
+							style={clickedButton ? styles.clickedButton : styles.button}
+						/>
+					</TouchableWithoutFeedback>
 				</View>
 			</View>
 		</View>
@@ -66,46 +77,52 @@ export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectMo
 
 const styles = StyleSheet.create({
 	fillScreen: {
-		width: "100%",
+		top: "-25%",
+		left: "-25%",
+		width: "150%",
 		height: "150%",
 		backgroundColor: "black",
 		opacity: 0.8,
-		zIndex: 1000,
 	},
 	center: {
 		height: "100%",
 		alignItems: "center",
 	},
 	modal: {
-		backgroundColor: "white",
-		height: 200,
-		width: "75%",
+		position: "absolute",
 		top: 175,
 		left: "12.5%",
+		height: 200,
+		width: "75%",
+		backgroundColor: "white",
 		borderRadius: 25,
 	},
 	title: {
 		padding: 25,
+		color: "#7C53C8",
 		fontSize: 20,
 		fontWeight: "600",
 	},
 	input: {
+		backgroundColor: "#F2EFF9",
 		margin: 10,
 		padding: 10,
+		paddingHorizontal: 15,
 		width: "85%",
 		height: 40,
-		borderRadius: 10,
-		borderColor: "gray",
-		borderWidth: 0.3,
+		borderColor: "#C8B7E7",
+		borderRadius: 30,
+		borderWidth: 2,
+		color: "#7C53C8",
 	},
 	button: {
-		width: "80%",
-		bottom: 40,
+		width: 110,
+		height: 35,
+		bottom: 55,
 	},
-	buttonText: {
-		fontSize: 18,
-		fontWeight: "700",
-		textAlign: "right",
-		color: "#710193",
+	clickedButton: {
+		width: 100,
+		height: 25,
+		bottom: 50,
 	},
 });
