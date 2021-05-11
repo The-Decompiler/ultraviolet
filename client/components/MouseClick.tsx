@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: 90,
 		height: 212,
-		right: "50%"
+		right: "49.5%"
 	},
 	middleClick: {
 		position: "absolute",
@@ -104,6 +104,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: 90,
 		height: 212,
-		left: "50%",
+		left: "49.5%",
 	},
 });
