@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
 	StyleSheet,
-	TouchableHighlight,
-	Text,
+	TouchableWithoutFeedback,
+	Image,
 	View
 } from "react-native";
 
@@ -13,18 +13,26 @@ type Props = {
 }
 
 export const Reconnect = ({ setConnect, setShowConnectModal }: Props) => {
+	const [clickedButton, setClickedButton] = useState(false);
 	const connectPrompt = () => setShowConnectModal(true);
 
 	return (
 		<View style={styles.footer}>
-			<TouchableHighlight
-				onPress={() => setConnect(true)}
+			<TouchableWithoutFeedback
+				onPress={() => {
+					setConnect(true);
+					setClickedButton(true);
+					setTimeout(() => setClickedButton(false), 150);
+				}}
 				onLongPress={connectPrompt}
-				underlayColor="#7A4988"
-				style={styles.refresh}
 			>
-				<Text style={styles.refreshText}>C</Text>
-			</TouchableHighlight>
+				<Image
+					source={clickedButton
+						? require("../static/ConnectButtonPressed.png")
+						: require("../static/ConnectButton.png")
+					}
+				/>
+			</TouchableWithoutFeedback>
 		</View>
 	);
 }
@@ -34,18 +42,10 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 25,
 		bottom: 25,
-		zIndex: 1,
-	},
-	refresh: {
-		width: 50,
+		width: 71,
+		height: 71,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#710193",
-		height: 50,
-		borderRadius: 15,
-	},
-	refreshText: {
-		fontSize: 15,
-		color: "white",
+		zIndex: 1,
 	},
 });
