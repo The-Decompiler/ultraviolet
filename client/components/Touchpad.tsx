@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { GestureResponderEvent,
 				 StyleSheet,
 				 View
 } from "react-native";
+
+import { State,
+				 TapGestureHandler,
+				 TapGestureHandlerStateChangeEvent
+} from "react-native-gesture-handler";
 
 import { mouseMove, mouseScroll, mouseHandler } from "../utils";
 import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
@@ -26,7 +31,7 @@ export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouse
 	const [prevScroll, setPrevScroll] = useState<ScrollPosition | null>(null);
 	const [scroll, setScroll] = useState<ScrollPosition | null>(null);
 	const [tap, setTap] = useState<Tap | null>(null);
-	const [time, setTime] = useState(Date.now().valueOf());
+	const [time, setTime] = useState<number>();
 
 	const isNumFingers = (finger: number, event: GestureResponderEvent) => event.nativeEvent.touches.length == finger;
 
@@ -39,12 +44,8 @@ export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouse
 	}
 
 	const gestureHandler = (responder: Responder, event: GestureResponderEvent) => {
-		if (responder == Responder.START) {
-			if (isNumFingers(1, event)) setTap(Tap.One);
-			if (isNumFingers(2, event)) setTap(Tap.Two);
-			if (isNumFingers(3, event)) setTap(Tap.Three);
-			setTime(Date.now().valueOf());
-		}
+		if (responder == Responder.START)
+			if (isNumFingers(1, event)) setTime(Date.now().valueOf());
 
 		if (responder == Responder.MOVE) {
 			// Set if not START and uses two fingers
@@ -66,37 +67,53 @@ export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouse
 			setPrevPosition(null);
 			setPosition(null);
 
-			if (Date.now().valueOf() - time < TAP_INTERVAL) {
-				if (tap)
-					switch ((tap as unknown) as MouseButtons) {
-						case MouseButtons.LEFT:
-							if (toggleMouseLeft) toggleLongButtonHandler(MouseButtons.LEFT)
-							else mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT);
-							break;
-						case MouseButtons.MIDDLE:
-							if (toggleMouseMiddle) toggleLongButtonHandler(MouseButtons.MIDDLE)
-							else mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE);
-							break;
-						case MouseButtons.RIGHT:
-							if (toggleMouseRight) toggleLongButtonHandler(MouseButtons.RIGHT)
-							else mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT);
-							break;
-					}
+			if (time && (Date.now().valueOf() - time < TAP_INTERVAL)) {
+				setTap(Tap.One);
+				setTime(0);
 			}
-			setTap(null);
 		}
 	}
 
+	const onTap = (finger: number, event: TapGestureHandlerStateChangeEvent) => {
+		if (event.nativeEvent.state === State.ACTIVE)
+			setTap((finger == 1) ? Tap.One : Tap.Two);
+	}
+
+	useEffect(() => {
+		if (tap) {
+			switch ((tap as unknown) as MouseButtons) {
+				case MouseButtons.LEFT:
+					if (toggleMouseLeft) toggleLongButtonHandler(MouseButtons.LEFT)
+					else mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT);
+					break;
+				case MouseButtons.MIDDLE:
+					if (toggleMouseMiddle) toggleLongButtonHandler(MouseButtons.MIDDLE)
+					else mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE);
+					break;
+				case MouseButtons.RIGHT:
+					if (toggleMouseRight) toggleLongButtonHandler(MouseButtons.RIGHT)
+					else mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT);
+					break;
+			}
+			setTap(null);
+		}
+	}, [tap]);
+
 	return (
-		<View
-			onStartShouldSetResponder={e => {
-				gestureHandler(Responder.START, e);
-				return true;
-			}}
-			onResponderMove={e => gestureHandler(Responder.MOVE, e)}
-			onResponderRelease={e => gestureHandler(Responder.RELEASE, e)}
-			style={styles.fullscreen}
-		/>
+		<TapGestureHandler
+			onHandlerStateChange={e => onTap(2, e)}
+			minPointers={2}
+		>
+			<View
+				onStartShouldSetResponder={e => {
+					gestureHandler(Responder.START, e);
+					return true;
+				}}
+				onResponderMove={e => gestureHandler(Responder.MOVE, e)}
+				onResponderRelease={e => gestureHandler(Responder.RELEASE, e)}
+				style={styles.fullscreen}
+			/>
+		</TapGestureHandler>
 	)
 }
 
