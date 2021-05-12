@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
 	BackHandler,
 	Image,
+	Platform,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -32,10 +33,12 @@ export const ConnectModal = ({ address, setAddress, setConnect, setShowConnectMo
 	}
 
 	useEffect(() => {
-		BackHandler.addEventListener("hardwareBackPress", disableModal);
-		return () => {
-			BackHandler.removeEventListener("hardwareBackPress", disableModal);
-		};
+		if (Platform.OS == "android") {
+			BackHandler.addEventListener("hardwareBackPress", disableModal);
+			return () => {
+				BackHandler.removeEventListener("hardwareBackPress", disableModal);
+			};
+		}
 	}, []);
 
 	const connect = () => {
