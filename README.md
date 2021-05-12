@@ -20,6 +20,8 @@ The frontend can send signals by its controls for touchpad, mouse buttons, and k
 This project uses **React Native** for the frontend mobile app and **Go** for its server to be hosted on the desktop. The Go server receives the movements via a TCP socket within your local network and uses the library **robotgo** to control your computer. The Wayland display server is not supported by robotgo and so is not supported by this application.
 
 ## Screenshots
-![screen](/client/static/Screen-demo.png)
-![keyboard](/client/static/Keyboard-demo.png)
-![connect](/client/static/Connect-demo.png)
+<p float="left">
+    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Screen-demo.png" height="550">
+    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Keyboard-demo.png" height="550">
+    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Connect-demo.png" height="550">
+</p>
