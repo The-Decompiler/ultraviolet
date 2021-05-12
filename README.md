@@ -9,7 +9,7 @@
 
 Use the following [instructions](https://reactnative.dev/docs/running-on-device) to run the app on a device. As a summary, install the required dependencies by going to the `client/` and do `yarn`. If running on iOS, go to `ios/` and install the pods by `pod install`. If building for Android, go to `android/`, sign a certificate and enter the password, then run `./gradlew assembleRelease` to generate the APK.
 
-Run the Go server in the device you want to be controlled by going to `server/` and running `go run main.go`.
+Run the Go server in the device you want to be controlled by going to `server/` and running `go run main.go -address <local network ip>:<port>`.
 
 ## Usage
 
