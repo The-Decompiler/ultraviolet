@@ -1,5 +1,5 @@
 # ultraviolet
-<img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/AppIcon.png" width="128">
+<img src="https://raw.githubusercontent.com/The-Decompiler/ultraviolet/main/client/static/AppIcon.png" width="128">
 
 *A mobile app to remotely control your computer.*
 
@@ -21,7 +21,7 @@ This project uses **React Native** for the frontend mobile app and **Go** for it
 
 ## Screenshots
 <p float="left">
-    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Screen-demo.png" height="550">
-    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Keyboard-demo.png" height="550">
-    <img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/Connect-demo.png" height="550">
+    <img src="https://raw.githubusercontent.com/The-Decompiler/ultraviolet/main/client/static/Screen-demo.png" height="550">
+    <img src="https://raw.githubusercontent.com/The-Decompiler/ultraviolet/main/client/static/Keyboard-demo.png" height="550">
+    <img src="https://raw.githubusercontent.com/The-Decompiler/ultraviolet/main/client/static/Connect-demo.png" height="550">
 </p>
