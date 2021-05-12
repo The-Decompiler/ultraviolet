@@ -1,7 +1,7 @@
-![ultraviolet](/client/static/AppIcon.png)
 # ultraviolet
+<img src="https://raw.githubusercontent.com/maxminoS/ultraviolet/feature/readme/client/static/AppIcon.png" width="128">
 
-A mobile app to remotely control your computer.
+*A mobile app to remotely control your computer.*
 
 ## Installation
 
