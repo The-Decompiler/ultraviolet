@@ -12,7 +12,7 @@ import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
 enum Responder { START, MOVE, RELEASE }
 enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE }
 
-const TAP_INTERVAL = 250;
+const TAP_INTERVAL = 100;
 
 export const Touchpad = () => {
 	const [prevPosition, setPrevPosition] = useState<Position | null>(null);
