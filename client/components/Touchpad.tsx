@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 
 import { GestureResponderEvent,
+				 Platform,
 				 StyleSheet,
 				 View
 } from "react-native";
@@ -39,8 +40,8 @@ export const Touchpad = () => {
 	const gestureHandler = (responder: Responder, event: GestureResponderEvent) => {
 		if (responder == Responder.START) {
 			if (isNumFingers(1, event)) setTap(Tap.One);
-			if (isNumFingers(2, event)) setTap(Tap.Two);
-			if (isNumFingers(3, event)) setTap(Tap.Three);
+			if (Platform.OS != "android") if (isNumFingers(2, event)) setTap(Tap.Two);
+			if (Platform.OS != "android") if (isNumFingers(3, event)) setTap(Tap.Three);
 			setTime(Date.now().valueOf());
 		}
 
