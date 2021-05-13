@@ -19,11 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { addressToString, connectSocket, convertIpAddress } from "./utils";
 import { DEFAULT_ADDRESS } from "./utils";
-
-export type Address = {
-	port: number,
-	host: string,
-}
+import { Address } from "./utils";
 
 const App = () => {
 	const [address, setAddress] = useState<Address>(DEFAULT_ADDRESS);

@@ -7,7 +7,8 @@ import { GestureResponderEvent,
 
 import { LongButtonStateContext, LongButtonDispatchContext } from "../contexts/LongButtonContext";
 import { mouseMove, mouseScroll, mouseHandler } from "../utils";
-import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
+import { MouseButtons, MouseClicks } from "../utils";
+import { Position, ScrollPosition } from "../utils";
 
 enum Responder { START, MOVE, RELEASE }
 enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE }
