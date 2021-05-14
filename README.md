@@ -13,7 +13,7 @@ Run the Go server in the device you want to be controlled by going to `server/` 
 
 ## Usage
 
-The frontend can send signals by its controls for touchpad, mouse buttons, and keyboard. First, hold the Connect button on the bottom left corner and enter the appropriate IP address for the socket. You can tap the top three quarters of the screen to test the Touchpad functionality to test that it sends the signals to the Go server. Use the bottom right button to pull up your keyboard and you can type to the computer. Finally, you can use the mouse in the bottom to simulate left clicks, right clicks, and middle clicks. You can also use touchpad gestures by tapping to left click, two-finger tapping to right click, and three-finger tapping to middle-click (the two-finger and three-finger tap gestures may not work if you are on Android).
+The frontend can send signals by its controls for touchpad, mouse buttons, and keyboard. First, hold the Connect button on the bottom left corner and enter the appropriate IP address for the socket. You can tap the top three quarters of the screen to test the Touchpad functionality to test that it sends the signals to the Go server. Use the bottom right button to pull up your keyboard and you can type to the computer. Finally, you can use the mouse in the bottom to simulate left clicks, right clicks, and middle clicks. You can also use touchpad gestures by tapping to left click. Two-finger tapping to right click and three-finger tapping to middle click is currently only available for iOS.
 
 ## Project
 

@@ -11,9 +11,9 @@ import {
 	View
 } from "react-native";
 
-import { Address } from "../App";
 import { convertIpAddress, addressToString } from "../utils";
 import { DEFAULT_ADDRESS } from "../utils";
+import { Address } from "../utils";
 
 type Props = {
 	address: Address,

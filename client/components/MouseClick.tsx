@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { LongButtonStateContext, LongButtonDispatchContext } from "../contexts/LongButtonContext";
 import { MouseButtons, MouseClicks } from "../utils";
 import { mouseHandler } from "../utils";
 
@@ -9,15 +10,11 @@ import {
 	View
 } from "react-native";
 
-type Props = {
-	toggleLongButtonHandler: (button: MouseButtons, turn?: boolean | null) => void,
-	toggleMouseLeft: boolean,
-	toggleMouseMiddle: boolean,
-	toggleMouseRight: boolean,
-}
-
-export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
+export const MouseClick = () => {
 	const [clickedButton, setClickedButton] = useState<MouseButtons | null>(null);
+
+	const { toggleMouseLeft, toggleMouseMiddle, toggleMouseRight } = useContext(LongButtonStateContext);
+	const longButtonDispatch = useContext(LongButtonDispatchContext);
 
 	const handleClick = (button: MouseButtons) => {
 		setClickedButton(button);
@@ -29,9 +26,9 @@ export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMou
 		<View style={styles.footer}>
 			<TouchableWithoutFeedback
 				onPress={() => toggleMouseLeft
-											 ? toggleLongButtonHandler(MouseButtons.LEFT)
+											 ? longButtonDispatch({ button: MouseButtons.LEFT })
 											 : handleClick(MouseButtons.LEFT)}
-				onLongPress={() => toggleLongButtonHandler(MouseButtons.LEFT)}
+				onLongPress={() => longButtonDispatch({ button: MouseButtons.LEFT })}
 			>
 				<Image
 					source={(toggleMouseLeft || (clickedButton == MouseButtons.LEFT))
@@ -44,9 +41,9 @@ export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMou
 			<View style={styles.center}>
 				<TouchableWithoutFeedback
 					onPress={() => toggleMouseMiddle
-											 ? toggleLongButtonHandler(MouseButtons.MIDDLE)
+											 ? longButtonDispatch({ button: MouseButtons.MIDDLE })
 											 : handleClick(MouseButtons.MIDDLE)}
-					onLongPress={() => toggleLongButtonHandler(MouseButtons.MIDDLE)}
+					onLongPress={() => longButtonDispatch({ button: MouseButtons.MIDDLE })}
 				>
 					<Image
 						source={(toggleMouseMiddle || (clickedButton == MouseButtons.MIDDLE))
@@ -59,9 +56,9 @@ export const MouseClick = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMou
 			</View>
 			<TouchableWithoutFeedback
 				onPress={() => toggleMouseRight
-											 ? toggleLongButtonHandler(MouseButtons.RIGHT)
+											 ? longButtonDispatch({ button: MouseButtons.RIGHT })
 											 : handleClick(MouseButtons.RIGHT)}
-				onLongPress={() => toggleLongButtonHandler(MouseButtons.RIGHT)}
+				onLongPress={() => longButtonDispatch({ button: MouseButtons.RIGHT })}
 			>
 				<Image
 					source={(toggleMouseRight || (clickedButton == MouseButtons.RIGHT))

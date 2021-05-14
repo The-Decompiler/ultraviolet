@@ -1,11 +1,26 @@
 import TcpSocket from "react-native-tcp-socket";
-import { Address } from "./App";
 
+// Default constants
 export let client: TcpSocket.Socket;
 export const DEFAULT_TEXT_VALUE = " ";
 export const DEFAULT_ADDRESS: Address = { port: 27001, host: "localhost" };
 const DEFAULT_STRING_LIMIT = 30;
 const DEFAULT_DECIMAL_PLACE = 0;
+
+export type Address = {
+	port: number,
+	host: string,
+}
+
+export type Position = {
+	x: number,
+	y: number,
+}
+
+export type ScrollPosition = {
+	firstY: number,
+	secondY: number,
+}
 
 export enum MouseClicks {
 	CLICK = "c",
@@ -17,16 +32,6 @@ export enum MouseButtons {
 	LEFT = "l",
 	MIDDLE = "m",
 	RIGHT = "r"
-}
-
-export type Position = {
-	x: number,
-	y: number,
-}
-
-export type ScrollPosition = {
-	firstY: number,
-	secondY: number,
 }
 
 enum FunctionKey {

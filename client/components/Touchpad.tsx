@@ -1,32 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { GestureResponderEvent,
+				 Platform,
 				 StyleSheet,
 				 View
 } from "react-native";
 
+import { LongButtonStateContext, LongButtonDispatchContext } from "../contexts/LongButtonContext";
 import { mouseMove, mouseScroll, mouseHandler } from "../utils";
-import { Position, ScrollPosition, MouseButtons, MouseClicks } from "../utils";
+import { MouseButtons, MouseClicks } from "../utils";
+import { Position, ScrollPosition } from "../utils";
 
 enum Responder { START, MOVE, RELEASE }
 enum Tap { One = MouseButtons.LEFT, Two = MouseButtons.RIGHT, Three = MouseButtons.MIDDLE }
 
-const TAP_INTERVAL = 250;
+const TAP_INTERVAL = 100;
 
-type Props = {
-	toggleLongButtonHandler: (button: MouseButtons, turn?: boolean | null) => void,
-	toggleMouseLeft: boolean,
-	toggleMouseMiddle: boolean,
-	toggleMouseRight: boolean,
-}
-
-export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouseMiddle, toggleMouseRight }: Props) => {
+export const Touchpad = () => {
 	const [prevPosition, setPrevPosition] = useState<Position | null>(null);
 	const [position, setPosition] = useState<Position | null>(null);
 	const [prevScroll, setPrevScroll] = useState<ScrollPosition | null>(null);
 	const [scroll, setScroll] = useState<ScrollPosition | null>(null);
 	const [tap, setTap] = useState<Tap | null>(null);
 	const [time, setTime] = useState(Date.now().valueOf());
+
+	const { toggleMouseLeft, toggleMouseMiddle, toggleMouseRight } = useContext(LongButtonStateContext);
+	const longButtonDispatch = useContext(LongButtonDispatchContext);
 
 	const isNumFingers = (finger: number, event: GestureResponderEvent) => event.nativeEvent.touches.length == finger;
 
@@ -41,8 +40,8 @@ export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouse
 	const gestureHandler = (responder: Responder, event: GestureResponderEvent) => {
 		if (responder == Responder.START) {
 			if (isNumFingers(1, event)) setTap(Tap.One);
-			if (isNumFingers(2, event)) setTap(Tap.Two);
-			if (isNumFingers(3, event)) setTap(Tap.Three);
+			if (Platform.OS != "android") if (isNumFingers(2, event)) setTap(Tap.Two);
+			if (Platform.OS != "android") if (isNumFingers(3, event)) setTap(Tap.Three);
 			setTime(Date.now().valueOf());
 		}
 
@@ -70,15 +69,15 @@ export const Touchpad = ({ toggleLongButtonHandler, toggleMouseLeft, toggleMouse
 				if (tap)
 					switch ((tap as unknown) as MouseButtons) {
 						case MouseButtons.LEFT:
-							if (toggleMouseLeft) toggleLongButtonHandler(MouseButtons.LEFT)
+							if (toggleMouseLeft) longButtonDispatch({ button: MouseButtons.LEFT })
 							else mouseHandler(MouseClicks.CLICK, MouseButtons.LEFT);
 							break;
 						case MouseButtons.MIDDLE:
-							if (toggleMouseMiddle) toggleLongButtonHandler(MouseButtons.MIDDLE)
+							if (toggleMouseMiddle) longButtonDispatch({ button: MouseButtons.MIDDLE })
 							else mouseHandler(MouseClicks.CLICK, MouseButtons.MIDDLE);
 							break;
 						case MouseButtons.RIGHT:
-							if (toggleMouseRight) toggleLongButtonHandler(MouseButtons.RIGHT)
+							if (toggleMouseRight) longButtonDispatch({ button: MouseButtons.RIGHT })
 							else mouseHandler(MouseClicks.CLICK, MouseButtons.RIGHT);
 							break;
 					}
