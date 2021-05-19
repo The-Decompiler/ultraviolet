@@ -110,16 +110,16 @@ export const mouseScroll = (previous: ScrollPosition, current: ScrollPosition) =
 // Keyboard
 // k<key...>      -- Key <enter, backspace>  [OpenKeyboard]
 // t<text>        -- Type                    [OpenKeyboard]
-export const keyboardHandler = (keyPress: string) => {
+export const keyboardHandler = (keyPress: string): string | number => {
 	// Function keys
 	if (keyPress == FunctionKeyNotation.BACKSPACE) {
 		sendMessage("k" + FunctionKey.BACKSPACE);
-		return;
+		return -1;
 	}
 	keyPress = keyPress.substring(1, keyPress.length);
 	if (keyPress == FunctionKeyNotation.ENTER) {
 		sendMessage("k" + FunctionKey.ENTER);
-		return;
+		return 0;
 	}
 
 	// Long string
@@ -128,11 +128,11 @@ export const keyboardHandler = (keyPress: string) => {
 		stringArray = limitString([], keyPress, DEFAULT_STRING_LIMIT);
 		for (let string in stringArray)
 			sendMessage("t" + stringArray[string]);
-		return;
+		return keyPress;
 	}
 	// Key presses
 	sendMessage("t" + keyPress);
-	return;
+	return keyPress;
 }
 
 const limitString = (limitedStrings: string[], string: string, limit: number) => {
