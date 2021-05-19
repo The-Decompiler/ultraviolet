@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import { VirtualText } from "./VirtualText";
 import {
 	Dimensions,
 	Image,
 	Keyboard,
+	KeyboardEvent,
 	Platform,
 	StyleSheet,
 	TextInput,
@@ -11,7 +13,6 @@ import {
 	View
 } from "react-native";
 
-import { keyboardHandler } from "../utils";
 import { DEFAULT_TEXT_VALUE } from "../utils";
 
 enum KeyboardButtons { Up, Down }
@@ -20,6 +21,8 @@ export const OpenKeyboard = () => {
 	const [keyPress, setKeyPress] = useState<string>(DEFAULT_TEXT_VALUE);
 	const [keyboardShowing, setKeyboardShowing] = useState(false);
 	const [clickedButton, setClickedButton] = useState<KeyboardButtons | null>(null);
+	const [virtualTextHandler, setVirtualTextHandler] = useState("");
+	const [keyboardHeight, setKeyboardHeight] = useState(0);
 	const inputRef = useRef<TextInput>(null);
 
 	useEffect(() => {
@@ -33,13 +36,20 @@ export const OpenKeyboard = () => {
 
 	useEffect(() => {
 		if (keyPress != DEFAULT_TEXT_VALUE) {
-			keyboardHandler(keyPress);
+			setVirtualTextHandler(keyPress);
 			setKeyPress(DEFAULT_TEXT_VALUE);
 		}
 	}, [keyPress]);
 
-	const showKeyboard = () => setKeyboardShowing(true);
-	const hideKeyboard = () => setKeyboardShowing(false);
+	const showKeyboard = (e: KeyboardEvent) => {
+		setKeyboardHeight(e.endCoordinates.height);
+		setKeyboardShowing(true);
+	}
+
+	const hideKeyboard = () => {
+		setKeyboardHeight(0);
+		setKeyboardShowing(false);
+	}
 
 	const handlePress = () => {
 		setClickedButton(KeyboardButtons.Up);
@@ -82,6 +92,13 @@ export const OpenKeyboard = () => {
 					/>
 				</TouchableWithoutFeedback>
 			</View>
+			{ keyboardShowing &&
+				<VirtualText
+					virtualTextHandler={virtualTextHandler}
+					setVirtualTextHandler={setVirtualTextHandler}
+					keyboardHeight={keyboardHeight}
+				/>
+			}
 			<TextInput
 				ref={inputRef}
 				onChangeText={setKeyPress}
